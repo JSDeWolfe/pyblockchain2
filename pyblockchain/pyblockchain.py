@@ -6,6 +6,7 @@ from time import time
 from uuid import uuid4
 from flask import Flask, jsonify, request, render_template
 from urllib.parse import urlparse
+import os
 
 class Blockchain(object):
 
@@ -298,13 +299,13 @@ def consensus():
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
+    port = int(os.environ.get('PORT', 5000))
+    #parser = ArgumentParser()
+    #parser.add_argument('-p', '--port', default=33507, type=int, help='port to listen on')
+    #args = parser.parse_args()
+    #port = args.port
 
-    parser = ArgumentParser()
-    parser.add_argument('-p', '--port', default=33507, type=int, help='port to listen on')
-    args = parser.parse_args()
-    port = args.port
-
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, debug=True)
 
        
     
