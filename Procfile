@@ -1,1 +1,1 @@
-web: gunicorn pyblockchain:pyblockchain
+web: python pyblockchain.pyblockchain.py
