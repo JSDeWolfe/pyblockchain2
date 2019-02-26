@@ -1,1 +1,1 @@
-web: python pyblockchain/pyblockchain.py
+worker: python pyblockchain/pyblockchain.py
