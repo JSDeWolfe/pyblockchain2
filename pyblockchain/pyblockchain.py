@@ -249,33 +249,34 @@ def full_chain():
     }
     return render_template('home.html',resp2=json.dumps(response)), 200
 
-@app.route('/nodes/register', methods=['POST', 'GET'])
-def register_nodes():
-    if request.method == 'POST':
-        values = request.get_json()
-        if values is None:
-            return "None Values"
+@app.route('/nodes/register', methods=['POST'])
+def register_nodespost():
+    values = request.get_json()
+    if values is None:
+        return "None Values"
 
-        nodes = values.get('nodes')
-        if nodes is None:
-            return "Error: Please supply a valid list of nodes", 400
+    nodes = values.get('nodes')
+    if nodes is None:
+        return "Error: Please supply a valid list of nodes", 400
 
-        for node in nodes:
-            blockchain.register_node(node)
+    for node in nodes:
+        blockchain.register_node(node)
 
-        response = {
-            'message': 'New nodes have been added',
-            'total_nodes': list(blockchain.nodes),
-        }
-        return jsonify(response), 201
-    if request.method == 'GET':
-        #need to switch links and have get
-        response = {
-            'message': 'New nodes have been added',
-            'total_nodes': list(blockchain.nodes),
-        }
-        return render_template('home.html',respRegister=response), 201
+    response = {
+        'message': 'New nodes have been added',
+        'total_nodes': list(blockchain.nodes),
+    }
+    return jsonify(response), 201
 
+
+@app.route('/nodes/register', methods=['GET'])
+def register_nodesget():
+    #need to switch links and have get
+    response = {
+        'message': 'New nodes have been added',
+        'total_nodes': list(blockchain.nodes),
+    }
+    return render_template('home.html',respRegister=response), 201
 
 
 @app.route('/nodes/resolve', methods=['GET'])
