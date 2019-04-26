@@ -261,7 +261,7 @@ def register_nodespost():
     listcheck = blockchain.nodes
     listcheck.append(node)
     if len(listcheck) != len(set(listcheck)):
-        return
+        return "Error: Node exists", 400
     blockchain.register_node(node)
 
     response = {
