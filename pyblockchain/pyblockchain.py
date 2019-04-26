@@ -254,7 +254,7 @@ def full_chain():
 def register_nodespost():
     values = request.get_json()
     if values is None:
-        return "None Values"
+        return {'Error': 'None values'}, 400
     node = values.get('nodes')
     if node is None:
         return {'Error': 'Please supply a valid list of nodes'}, 400
