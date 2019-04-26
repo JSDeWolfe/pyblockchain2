@@ -257,11 +257,11 @@ def register_nodespost():
         return "None Values"
     node = values.get('nodes')
     if node is None:
-        return "Error: Please supply a valid list of nodes", 400
+        return {'Error': 'Please supply a valid list of nodes'}, 400
     listcheck = blockchain.nodes
     listcheck.append(node)
     if len(listcheck) != len(set(listcheck)):
-        return "Error: Node exists", 400
+        return {'Error': 'Node exists'}, 400
     blockchain.register_node(node)
 
     response = {
