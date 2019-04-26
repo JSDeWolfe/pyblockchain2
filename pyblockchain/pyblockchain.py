@@ -255,18 +255,17 @@ def register_nodespost():
     values = request.get_json()
     if values is None:
         return "None Values"
-
-    nodes = values.get('nodes')
-    print("nodes is "+nodes)
-    if nodes is None:
+    node = values.get('nodes')
+    if node is None:
         return "Error: Please supply a valid list of nodes", 400
-    print("nodes debug "+nodes)
-    blockchain.register_node(nodes)
-    #for node in nodes:
-    #    blockchain.register_node(node)
+    listcheck = self.nodes
+    listcheck.append(node)
+    if len(listcheck) != len(set(listcheck)):
+        return
+    blockchain.register_node(node)
 
     response = {
-        'message': 'New nodes have been added',
+        'message': 'New node has been added',
         'total_nodes': list(blockchain.nodes),
     }
     return jsonify(response), 201
