@@ -7,13 +7,14 @@ from uuid import uuid4
 from flask import Flask, jsonify, request, render_template
 from urllib.parse import urlparse
 import os
+#https://www.therealtomrose.com/how-to-debug-python-or-django-in-heroku/
 
 class Blockchain(object):
 
     def __init__(self):
         self.chain = []
         self.current_transactions = []
-        self.nodes = set()
+        self.nodes = []
         self.new_block(previous_hash='1', proof=100)
         self.testprop = "string val"
 
@@ -22,15 +23,15 @@ class Blockchain(object):
         Add a new node to the list of nodes
         :param address: Address of node. Eg. 'http://192.168.0.5:5000'
         """
-
-        parsed_url = urlparse(address)
-        if parsed_url.netloc:
-            self.nodes.add(parsed_url.netloc)
-        elif parsed_url.path:
+        self.nodes.append(address)
+        #parsed_url = urlparse(address)
+        #if parsed_url.netloc:
+        #    self.nodes.add(parsed_url.netloc)
+        #elif parsed_url.path:
             # Accepts an URL without scheme like '192.168.0.5:5000'.
-            self.nodes.add(parsed_url.path)
-        else:
-            raise ValueError('Invalid URL')
+        #    self.nodes.add(parsed_url.path)
+        #else:
+        #    raise ValueError('Invalid URL')
 
 
     def valid_chain(self, chain):
@@ -256,11 +257,13 @@ def register_nodespost():
         return "None Values"
 
     nodes = values.get('nodes')
+    print("nodes is "+nodes)
     if nodes is None:
         return "Error: Please supply a valid list of nodes", 400
-
-    for node in nodes:
-        blockchain.register_node(node)
+    print("nodes debug "+nodes)
+    blockchain.register_node(nodes)
+    #for node in nodes:
+    #    blockchain.register_node(node)
 
     response = {
         'message': 'New nodes have been added',
@@ -271,7 +274,6 @@ def register_nodespost():
 
 @app.route('/nodes/register', methods=['GET'])
 def register_nodesget():
-    #need to switch links and have get
     response = {
         'message': 'New nodes have been added',
         'total_nodes': list(blockchain.nodes),
@@ -296,6 +298,32 @@ def consensus():
 
     return render_template('home.html',resp3=json.dumps(response)), 200
 
+@app.route('/chaintest', methods=['GET'])
+def chaintest():
+    response = blockchain.chain
+    return jsonify(response), 200
+
+@app.route('/posttransaction', methods=['POST'])
+def posttransaction():
+    values = request.get_json()
+    print("sender "+values.get('sender')+" recipient "+values.get('recipient')+" amount "+values.get('amount'))
+    # Check that the required fields are in the POST'ed data
+    required = ['sender', 'recipient', 'amount']
+    if not all(k in values for k in required):
+        return 'Missing values', 400
+
+    # Create a new Transaction
+    index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
+
+    response = {'message': f'Transaction will be added to Block {index}'}
+    return jsonify(response), 201
+
+
+
+@app.route('/posttransaction', methods=['GET'])
+def getposttransaction():
+    values = request.get_json()
+    return jsonify(values), 200
 
 
 if __name__ == '__main__':
