@@ -324,6 +324,11 @@ def queryother():
     return render_template('home.html',respQuery=r), 201
 
 
+@app.route('/getnodes', methods=['GET'])
+def getnodes():
+    msg = {'Chain State':'nodes', 'nodes':blockchain.nodes}
+    return jsonify(msg), 200
+
 @app.route('/posttransaction', methods=['GET'])
 def getposttransaction():
     values = request.get_json()
