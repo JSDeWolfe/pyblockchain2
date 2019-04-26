@@ -318,6 +318,10 @@ def posttransaction():
     response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201
 
+@app.route('/queryother', methods=['GET'])
+def queryother():
+    r = requests.get('https://pyblockchain.herokuapp.com/getchain').json()
+    return render_template('home.html',respQuery=r), 201
 
 
 @app.route('/posttransaction', methods=['GET'])
