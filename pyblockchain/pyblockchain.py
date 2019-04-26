@@ -254,14 +254,14 @@ def full_chain():
 def register_nodespost():
     values = request.get_json()
     if values is None:
-        return {'Error': 'None values'}, 400
+        return jsonify({'Error': 'None values'}), 400
     node = values.get('nodes')
     if node is None:
-        return {'Error': 'Please supply a valid list of nodes'}, 400
+        return jsonify({'Error': 'Please supply a valid list of nodes'}), 400
     listcheck = blockchain.nodes
     listcheck.append(node)
     if len(listcheck) != len(set(listcheck)):
-        return {'Error': 'Node exists'}, 400
+        return jsonify({'Error': 'Node exists'}), 400
     blockchain.register_node(node)
 
     response = {
