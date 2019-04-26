@@ -260,7 +260,7 @@ def register_nodespost():
         return jsonify({'Error': 'Please supply a valid list of nodes'}), 400
     listcheck = blockchain.nodes
     listcheck.append(node)
-    if len(listcheck) != len(set(listcheck)):
+    if len(listcheck) == len(set(listcheck)):
         return jsonify({'Error': 'Node exists'}), 400
     blockchain.register_node(node)
 
@@ -337,7 +337,7 @@ def getposttransaction():
 
 @app.route('/getbalance', methods=['GET'])
 def getbalance():
-    values = request.get_json()
+    values = {'4':4}
     return jsonify(values), 200    
 
 
