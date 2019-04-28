@@ -249,6 +249,7 @@ def register_nodespost():
 
     response = {
         'message': 'New node has been added',
+        'node added': node,
         'total_nodes': list(blockchain.nodes),
     }
     return jsonify(response), 201
