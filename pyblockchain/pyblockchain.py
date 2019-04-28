@@ -179,7 +179,7 @@ def mine():
 
     # We must receive a reward for finding the proof.
     # The sender is "0" to signify that this node has mined a new coin.
-    
+
     blockchain.new_transaction(
         sender="0",
         recipient=node_identifier,
@@ -234,13 +234,17 @@ def register_nodespost():
     values = request.get_json()
     if values is None:
         return jsonify({'Error': 'None values'}), 400
+
     node = values.get('nodes')
     if node is None:
         return jsonify({'Error': 'Please supply a valid list of nodes'}), 400
+    if node == blockchain.deploynode:
+        return jsonify({'Error': 'Self node added'}), 400
     listcheck = blockchain.nodes
     listcheck.append(node)
-    if (len(listcheck) == len(set(listcheck)) or node == blockchain.deploynode):
-        return jsonify({'Error': 'Node exists or Self node added'}), 400
+    if (len(blockchain.nodes) == len(set(listcheck))):
+        return jsonify({'Error': 'Node exists'}), 400
+
     blockchain.register_node(node)
 
     response = {
