@@ -48,11 +48,6 @@ class Blockchain(object):
 
 
     def resolve_conflicts(self):
-        """
-        This is our consensus algorithm, it resolves conflicts
-        by replacing our chain with the longest one in the network.
-        :return: True if our chain was replaced, False if not
-        """
 
         neighbours = self.nodes
         new_chain = None
@@ -184,6 +179,7 @@ def mine():
 
     # We must receive a reward for finding the proof.
     # The sender is "0" to signify that this node has mined a new coin.
+    
     blockchain.new_transaction(
         sender="0",
         recipient=node_identifier,
