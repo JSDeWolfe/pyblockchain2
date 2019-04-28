@@ -16,30 +16,13 @@ class Blockchain(object):
         self.current_transactions = []
         self.nodes = []
         self.new_block(previous_hash='1', proof=100)
-        self.testprop = "string val"
+        self.deploynode = "https://pyblockchain2.herokuapp.com/"
 
     def register_node(self, address):
-        """
-        Add a new node to the list of nodes
-        :param address: Address of node. Eg. 'http://192.168.0.5:5000'
-        """
         self.nodes.append(address)
-        #parsed_url = urlparse(address)
-        #if parsed_url.netloc:
-        #    self.nodes.add(parsed_url.netloc)
-        #elif parsed_url.path:
-            # Accepts an URL without scheme like '192.168.0.5:5000'.
-        #    self.nodes.add(parsed_url.path)
-        #else:
-        #    raise ValueError('Invalid URL')
 
 
     def valid_chain(self, chain):
-        """
-        Determine if a given blockchain is valid
-        :param chain: A blockchain
-        :return: True if valid, False if not
-        """
 
         last_block = chain[0]
         current_index = 1
@@ -260,8 +243,8 @@ def register_nodespost():
         return jsonify({'Error': 'Please supply a valid list of nodes'}), 400
     listcheck = blockchain.nodes
     listcheck.append(node)
-    if len(listcheck) == len(set(listcheck)):
-        return jsonify({'Error': 'Node exists'}), 400
+    if (len(listcheck) == len(set(listcheck)) or node == blockchain.deploynode):
+        return jsonify({'Error': 'Node exists or Self node added'}), 400
     blockchain.register_node(node)
 
     response = {
